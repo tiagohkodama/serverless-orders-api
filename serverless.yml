@@ -1,0 +1,79 @@
+service: serverless-orders-crud
+frameworkVersion: '3'
+plugins:
+  - serverless-offline
+  - serverless-localstack
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+  environment:
+    ORDERS_TABLE: ${self:service}-orders-${self:provider.stage}
+
+custom:
+  localstack:
+    stages: [ local ]
+    host: http://localhost
+    edgePort: 4566
+  serverless-offline:
+    httpPort: 3000
+
+package:
+  individually: true
+
+functions:
+  createOrder:
+    handler: dist/handlers/createOrder.handler
+    events:
+      - http:
+          path: orders
+          method: post
+  getOrders:
+    handler: dist/handlers/getOrders.handler
+    events:
+      - http:
+          path: orders
+          method: get
+  getOrderById:
+    handler: dist/handlers/getOrderById.handler
+    events:
+      - http:
+          path: orders/{id}
+          method: get
+  updateOrder:
+    handler: dist/handlers/updateOrder.handler
+    events:
+      - http:
+          path: orders/{id}
+          method: put
+  deleteOrder:
+    handler: dist/handlers/deleteOrder.handler
+    events:
+      - http:
+          path: orders/{id}
+          method: delete
+
+resources:
+  Resources:
+    OrdersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.ORDERS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+provider:
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:*
+          Resource: "*"
