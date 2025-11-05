@@ -1,6 +1,40 @@
 node_modules
 dist
 .serverless
+# Environment
 .env
+.env.*
+
+# macOS
 .DS_Store
-coverage
+
+# Coverage
+coverage/
+
+# LocalStack data
+.localstack/
+
+# Editor directories
+.vscode/
+.idea/
+
+# Logs and temp
+logs/
+tmp/
+tmp/*
+
+# NPM/Yarn logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Cache and build outputs
+.cache/
+.nyc_output/
+
+# AWS SAM / other infra
+.aws-sam/
+.aws/
+
+*.zip

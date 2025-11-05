@@ -4,41 +4,30 @@
   "private": true,
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf .serverless dist node_modules",
-    "lint": "eslint --ext .ts src tests --max-warnings=0",
-    "format": "prettier --write \"src/**/*.{ts,js,json,md}\"",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "sls:deploy:local": "SLS_DEBUG=* sls deploy --stage local",
-    "sls:offline": "sls offline start --stage local",
-    "prepare": "husky install"
+    "local:start": "docker-compose up -d",
+    "local:stop": "docker-compose down",
+    "local:setup": "bash ./scripts/setup-local.sh",
+    "local:deploy": "bash ./scripts/package-and-create-lambdas.sh",
+    "local:invoke:generate": "bash ./scripts/generate-invoke-commands.sh",
+    "local:invoke": "bash ./scripts/invoke-lambdas.sh"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.400.0",
     "@aws-sdk/lib-dynamodb": "^3.400.0",
+    "aws-lambda": "^1.0.7",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "typescript": "^5.3.0",
-    "serverless": "^3.40.0",
-
+    "@types/aws-lambda": "^8.10.157",
+    "@types/jest": "^29.5.0",
+    "@types/uuid": "^10.0.0",
+    "aws-sdk-client-mock": "^2.2.0",
+    "cross-env": "^7.0.3",
     "jest": "^29.6.0",
     "ts-jest": "^29.1.0",
-    "@types/jest": "^29.5.0",
-    "eslint": "^8.50.0",
-    "prettier": "^2.8.0",
-    "lint-staged": "^13.2.0",
-    "husky": "^8.0.0",
-    "aws-sdk-client-mock": "^2.2.0",
-    "cross-env": "^7.0.3"
-  },
-  "husky": {
-    "hooks": {}
-  },
-  "lint-staged": {
-    "src/**/*.{ts,js}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.0"
   }
 }
