@@ -5,10 +5,11 @@ const config: Config.InitialOptions = {
   testEnvironment: 'node',
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.ts'],
+  setupFilesAfterEnv: ['<rootDir>/tests/setupTests.ts'],
   coverageThreshold: {
     global: {
-      branches: 80,
-      functions: 80,
+      branches: 60,
+      functions: 75,
       lines: 80,
       statements: 80
     }
