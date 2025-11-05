@@ -1,0 +1,18 @@
+services:
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=dynamodb,lambda
+      - DEFAULT_REGION=us-east-1
+      - DATA_DIR=/tmp/ls_data
+      - LAMBDA_EXECUTOR=docker
+    volumes:
+      - localstack_data:/tmp/ls_data
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  localstack_data:
+
