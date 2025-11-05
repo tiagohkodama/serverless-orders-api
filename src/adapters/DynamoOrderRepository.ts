@@ -6,17 +6,17 @@ const TABLE = process.env.ORDERS_TABLE!
 
 export class DynamoOrderRepository implements IOrderRepository {
   async create(order: OrderProps): Promise<OrderProps> {
-    await ddbDocClient.put({ TableName: TABLE, Item: order })
+    await (ddbDocClient as any).put({ TableName: TABLE, Item: order })
     return order
   }
 
   async findAll(): Promise<OrderProps[]> {
-    const resp = await ddbDocClient.scan({ TableName: TABLE })
+    const resp = await (ddbDocClient as any).scan({ TableName: TABLE })
     return (resp.Items as OrderProps[]) || []
   }
 
   async findById(id: string): Promise<OrderProps | null> {
-    const resp = await ddbDocClient.get({ TableName: TABLE, Key: { id } })
+    const resp = await (ddbDocClient as any).get({ TableName: TABLE, Key: { id } })
     return (resp.Item as OrderProps) ?? null
   }
 
@@ -37,7 +37,7 @@ export class DynamoOrderRepository implements IOrderRepository {
 
     const UpdateExpression = 'SET ' + updateExprParts.join(', ')
 
-    const resp = await ddbDocClient.update({
+    const resp = await (ddbDocClient as any).update({
       TableName: TABLE,
       Key: { id },
       UpdateExpression,
@@ -50,6 +50,6 @@ export class DynamoOrderRepository implements IOrderRepository {
   }
 
   async delete(id: string): Promise<void> {
-    await ddbDocClient.delete({ TableName: TABLE, Key: { id } })
+    await (ddbDocClient as any).delete({ TableName: TABLE, Key: { id } })
   }
 }
